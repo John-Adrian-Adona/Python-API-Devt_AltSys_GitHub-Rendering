@@ -16,6 +16,10 @@ from models.user import UserModel
 
 from db import db
 from flask_migrate import Migrate
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # Create a web server using flask
 app = Flask(__name__)
@@ -35,7 +39,7 @@ app.config["OPENAPI_URL_PREFIX"] = "/"
 app.config["OPENAPI_SWAGGER_UI_PATH"] = "/"
 app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
 
 # Connect flask app to the database
 db.init_app(app)
@@ -51,7 +55,7 @@ api.register_blueprint(AuthorBlueprint)
 api.register_blueprint(TagBlueprint)
 api.register_blueprint(UserBlueprint)
 
-app.config["JWT_SECRET_KEY"] = "132354456734573457754335648563456"
+app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
 jwt = JWTManager(app)
 
 ## Checks if every JWT that goes inside our system/api is in the blocklist
